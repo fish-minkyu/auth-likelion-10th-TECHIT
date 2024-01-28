@@ -4,6 +4,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 // Spring Security는 대부분 설정으로 이뤄진다.
@@ -45,9 +51,34 @@ public class WebSecurityConfig {
           // 모두가 접근할 수 있다.
           .permitAll()
       )
-    ;
+      ;
     // 어떤 경로는 접근해도 되고 어떤 경로는 접근하면 안된다란 설정
     return http.build();  // builder pattern을 사용하고 있다.
     // build 하는 것 자체가 예외를 발생시키기 때문에 throws가 필요하다.
   }
+
+  // formLogin 객체가 userDetailsManager 객체를 사용한다.
+  @Bean
+  public UserDetailsManager userDetailsManager(
+    PasswordEncoder passwordEncoder
+  ) {
+    // 사용자 1
+    UserDetails user1 = User.withUsername("user1")
+      .password(passwordEncoder.encode("password1"))
+      .build();
+    // Spring Security에서 기본으로 제공하는,
+    // 메모리 기반 사용자 관리 클래스 + 사용자 1
+    return new InMemoryUserDetailsManager(user1);
+  }
+
+  // userDetailsManager가 passwordEncoder을 사용한다.
+  // 비밀번호를 암호화 & 해석하는 Bean 객체
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }
+
+// formLogin - 사용 -> userDetailsManager
+// formLogin - 사용 -> passwordEncoder
+// userDetailsManager - 사용 -> passwordEncoder
