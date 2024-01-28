@@ -35,10 +35,21 @@ public class WebSecurityConfig {
         // "no-auth"로 오는 요청은 모두 허가
         auth -> auth
           // 어떤 경로에 대한 설정인지
-          .requestMatchers("/no-auth")
+          .requestMatchers(
+            "/no-auth",
+            "/users/home"
+          )
           // 이 경로에 도달할 수 있는 설정
           .permitAll()
           .requestMatchers("/users/my-profile")
+          .authenticated()
+          // 로그인 한 사용자는 해당 URL을 허용하지 않겠다.
+          .requestMatchers(
+            "/users/login",
+            "/users/register"
+          )
+          .anonymous()
+          .anyRequest()
           .authenticated()
     )
       // html form 요소를 이용해 로그인을 시키는 설정 (가장 일반적인 방식)
@@ -50,8 +61,6 @@ public class WebSecurityConfig {
           .defaultSuccessUrl("/users/my-profile")
           // 실패 시 이동할 URL (사용자에게 실패했음을 알리는 설정)
           .failureUrl("/users/login?fail")
-          // 모두가 접근할 수 있다.
-          .permitAll()
       )
       // 로그아웃 설정
       // : 로그아웃 하는 방법은 로그인 방식 상관없이 동일

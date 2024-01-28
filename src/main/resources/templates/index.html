@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<h1>HOME</h1>
+<!--
+  sec:authorize
+  : 로그인이 되어있는지 안되어있는지를 바탕으로 보여줄지 말지 결정하는 thymeleaf extension이다.
+  (컨트롤러에서 view로 전달되는 상황에서만 작동된다.)
+-->
+<div sec:authorize="isAnonymous()">
+  <a href="/users/login">로그인</a>
+  <a href="/users/register">회원가입</a>
+</div>
+<div sec:authorize="isAuthenticated()">
+  <h3>반갑습니다, <span sec:authentication="name"></span>님!</h3>
+  <form action="/users/logout" method="post">
+    <input type="submit" value="로그아웃">
+  </form>
+</div>
+</body>
+</html>
