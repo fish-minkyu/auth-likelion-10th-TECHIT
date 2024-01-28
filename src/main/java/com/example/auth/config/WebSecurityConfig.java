@@ -1,8 +1,9 @@
-package com.example.config;
+package com.example.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 // Spring Security는 대부분 설정으로 이뤄진다.
@@ -20,6 +21,7 @@ public class WebSecurityConfig {
     // authorizeHttpRequests
     // : 메서드 형태로 설정들을 받음
     http
+      .csrf(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(
         // 함수형 프로그래밍으로 어떤 것들을 적용해줄지를 메소드 형식으로 전달
         // "no-auth"로 오는 요청은 모두 허가
