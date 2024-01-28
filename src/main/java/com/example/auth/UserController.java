@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
   private final UserDetailsManager manager;
   private final PasswordEncoder passwordEncoder;
+  // interface를 기반 DI (Strategy Pattern)
+  // private final  IUserService service;
 
   @GetMapping("/home")
   public String home() {
