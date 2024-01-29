@@ -49,7 +49,8 @@ public class WebSecurityConfig {
             "/no-auth",
             "/users/home",
             "/tests",
-            "/token/issue"
+            "/token/issue",
+            "/token/validate" // 인증시켜주는 과정을 아직 안만들어서 전체 허용
           )
           // 이 경로에 도달할 수 있는 설정
           .permitAll()

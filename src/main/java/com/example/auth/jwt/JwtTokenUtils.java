@@ -1,6 +1,7 @@
 package com.example.auth.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import java.time.Instant;
 public class JwtTokenUtils {
   // JWT를 만드는 용도의 암호키
   private final Key signingKey;
+  // JWT를 해석하는 용도의 객체
+  private final JwtParser jwtParser; // parser: 특정한 형식의 문자열을 데이터로 다시 역직렬화하는 것
 
   public JwtTokenUtils(
     // @Value <- Spring의 Value이 필요하다. (Lombok 아님)
@@ -28,6 +31,10 @@ public class JwtTokenUtils {
     log.info(jwtSecret);
     // jjwt에서 key를 활용하기 위한 준비
     this.signingKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    this.jwtParser = Jwts
+      .parserBuilder()
+      .setSigningKey(this.signingKey)
+      .build();
   }
 
   // UserDetails를 받아서 JWT로 변환하는 메서드
@@ -68,5 +75,24 @@ public class JwtTokenUtils {
       .setClaims(jwtClaims)
       .signWith(this.signingKey)
       .compact();
+  }
+
+  // 정상적인 JWT인지를 판단하는 메서드
+  public boolean validate(String token) {
+    try {
+      // 정상적이지 않은 JWT라면 예외(Exception)가 발생한다.
+      jwtParser.parseClaimsJws(token);
+      return true;
+    } catch (Exception e) {
+      log.warn("invalid jwt");
+    }
+    return false;
+  }
+
+  // 실제 데이터(Payload)를 반환하는 메서드
+  public Claims parseClaims(String token) {
+    return jwtParser
+      .parseClaimsJws(token)
+      .getBody();
   }
 }

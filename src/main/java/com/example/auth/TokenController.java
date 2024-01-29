@@ -3,16 +3,14 @@ package com.example.auth;
 import com.example.auth.jwt.JwtRequestDto;
 import com.example.auth.jwt.JwtResponseDto;
 import com.example.auth.jwt.JwtTokenUtils;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
@@ -52,5 +50,18 @@ public class TokenController {
     JwtResponseDto response = new JwtResponseDto();
     response.setToken(jwt);
     return response;
+  }
+
+  // 사용자가 토큰을 첨부했을 때, 유효성 검사
+  @GetMapping("/validate")
+  public Claims validateToken(
+    @RequestParam("token") String token
+  ) {
+    // 정상적이지 않다면 에러 반환
+    if (!jwtTokenUtils.validate(token))
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+
+    // 정상적이라면 토큰 내용 반환
+    return jwtTokenUtils.parseClaims(token);
   }
 }
