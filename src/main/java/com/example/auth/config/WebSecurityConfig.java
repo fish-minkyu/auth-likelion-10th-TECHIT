@@ -1,5 +1,6 @@
 package com.example.auth.config;
 
+import com.example.auth.filters.AllAuthenticatedFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 // Spring Security는 대부분 설정으로 이뤄진다.
 
@@ -74,6 +76,11 @@ public class WebSecurityConfig {
           .logoutUrl("/users/logout")
           // 로그아웃 성공시 이동할 페이지
           .logoutSuccessUrl("/users/login")
+      )
+      // 특정 필터 앞에 나만의 필터를 넣는다.
+      .addFilterBefore( // 36분 다시 듣기 앞에 넣는다 어쩌구 저쩌구
+        new AllAuthenticatedFilter(),
+        AuthorizationFilter.class
       )
       ;
     // 어떤 경로는 접근해도 되고 어떤 경로는 접근하면 안된다란 설정
