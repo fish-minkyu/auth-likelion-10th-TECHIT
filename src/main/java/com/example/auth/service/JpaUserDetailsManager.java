@@ -1,5 +1,6 @@
 package com.example.auth.service;
 
+import com.example.auth.entity.CustomUserDetails;
 import com.example.auth.entity.UserEntity;
 import com.example.auth.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,10 +19,38 @@ import java.util.Optional;
 // 커스텀 UserDetailsManager
 // => Jpa에 등록되어 있는 사용자를 가져올 수 있게끔 UserDetailsService를 만든 것이다.
 @Slf4j
-@RequiredArgsConstructor
+// @RequiredArgsConstructor // 테스트 목적이어서 지움
 @Service
 public class JpaUserDetailsManager implements UserDetailsManager {
   private final UserRepository userRepository;
+
+  public JpaUserDetailsManager(
+    UserRepository userRepository,
+    // 내부에서 암호화를 진행하지 않고 외부에서 암호화된 비밀번호를 전달해줬다고 가정
+    // So, 의존성으로 추가될 필요가 없다.
+    PasswordEncoder passwordEncoder
+  ) {
+    // 오롯이 테스트 목적의 사용자를 추가하는 용도
+    this.userRepository = userRepository;
+    // UserDetails 사용
+/*    createUser(User.withUsername("user1")
+      .password(passwordEncoder.encode("password1"))
+      .build()
+    );
+    createUser(User.withUsername("user2")
+      .password(passwordEncoder.encode("password2"))
+      .build()
+    );
+*/
+
+    // CustomUserDetails 사용
+    createUser(CustomUserDetails.builder()
+      .username("user1")
+      .password(passwordEncoder.encode("password1"))
+      .email("user1@gmail.com")
+      .phone("01012345678")
+      .build());
+  }
 
   @Override
   // formLogin 등 Spring Security 내부에서
@@ -32,21 +62,53 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     if (optionalUser.isEmpty())
       throw new UsernameNotFoundException(username); // UserDetailsService의 에러 객체
 
-    return User.withUsername(username).build();
+    UserEntity userEntity = optionalUser.get();
+
+    // CustomUserDetails 반환
+    return CustomUserDetails.builder()
+      .username(userEntity.getUsername())
+      .password(userEntity.getPassword())
+      .email(userEntity.getEmail())
+      .phone(userEntity.getPhone())
+      .build();
+
+    // UserDeatils 반환
+/*    return User.withUsername(username)
+      .password(optionalUser.get().getPassword())
+      .build();
+*/
   }
 
   @Override
   // 편의를 위해 같은 규약으로 회원가입을 하는 메서드
-  public void createUser(UserDetails user) {
+  public void createUser(UserDetails user) { // UserDetails는 사용자의 정보를 담고 주고 받기 위한 용도의 객체다. 로그인 시, 사용자의 자체를 나타낸다.
     if (this.userExists(user.getUsername()))
       // Security 내부에서 쓰는게 아닌 개발자의 편의를 위해 사용하기 때문에
       // ResponseStatusException()을 쓰는게 맞다.
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-    UserEntity userEntity = UserEntity.builder()
+
+    try {
+      CustomUserDetails userDetails
+        = (CustomUserDetails) user; // user는 UserDetails다.
+      UserEntity newUser = UserEntity.builder()
+        .username(userDetails.getUsername())
+        .password(userDetails.getPassword())
+        .email(userDetails.getEmail())
+        .phone(userDetails.getPhone())
+        .build();
+      userRepository.save(newUser);
+    } catch (ClassCastException e) {
+      log.error("Failed Cast to: {}", CustomUserDetails.class);
+      throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+      // UserDetails 사용
+/*    UserEntity userEntity = UserEntity.builder()
       .username(user.getUsername())
-      .password(user.getPassword())
+      .password(user.getPassword()) // user.getPassword()는 암호화된 비밀번호다. (UserController에서 암호화가 되어 넘어왔다.)
       .build();
     userRepository.save(userEntity);
+*/
   }
 
   @Override

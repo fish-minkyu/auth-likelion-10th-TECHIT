@@ -1,5 +1,6 @@
 package com.example.auth;
 
+import com.example.auth.entity.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-  private final UserDetailsManager manager;
+  private final UserDetailsManager manager; // JpaUserDetailsManager (다형성으로 주입 가능)
   private final PasswordEncoder passwordEncoder;
   private final AuthenticationFacade authFacade;
   // interface 기반 DI (Strategy Pattern)
@@ -53,7 +54,9 @@ public class UserController {
      log.info(authentication.getName()); // 사용자 이름 출력
      // getPrincipal
      // : UserDetailsManager에서 사용하고 있는 User 객체 정보를 Principal에 담겨 있다.
-     log.info(((User) authentication.getPrincipal()).getPassword());
+//     log.info(((User) authentication.getPrincipal()).getPassword()); // null이 왜 나오지?
+     log.info(((CustomUserDetails) authentication.getPrincipal()).getPassword());
+     log.info(((CustomUserDetails) authentication.getPrincipal()).getEmail());
      return "my-profile";
    }
 
@@ -69,11 +72,21 @@ public class UserController {
      @RequestParam("password") String password,
      @RequestParam("password-check") String passwordCheck
    ) {
+     //Note 추후 비밀번호 일치여부와 암호화는 Service 계층으로 옮겨주자
      // TODO password == passwordCheck
      if (password.equals(passwordCheck)) {
        // TODO 주어진 정보를 바탕으로 새로운 사용자 생성
-       manager.createUser(User.withUsername(username)
-         .password(passwordEncoder.encode(password))
+
+       // UserDetails 사용
+     /*  manager.createUser(User.withUsername(username)
+         .password(passwordEncoder.encode(password)) // 비밀번호 암호
+         .build());
+     */
+
+       // CustomUserDetails 사용해서 보내주기
+       manager.createUser(CustomUserDetails.builder()
+           .username(username)
+           .password(passwordEncoder.encode(password))
          .build());
      }
 

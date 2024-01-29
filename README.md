@@ -1,9 +1,11 @@
 # Auth
 
 - 2024.01.25 ~ 01.26`10주차`
-- 01.25
-- 01.26 UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
+- 01.25 UserDetailsManager, Authentication, SecurityContextHolder, Strategy Pattern
+- 01.26 CustomUserDetails 
+UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
 
+`1월.25일`은 
 
 Spring Security를 통해 로그인을 학습하는 프로젝트다.
 
@@ -30,7 +32,9 @@ interface를 기반 커스터마이징 (Strategy Pattern),
 인터페이스가 구현이 어떻게 되어있는지 보단, 이런 구현체를 마련해주었다는거에 좀 더 집중을 하는 것이다.  
 인터페이스가 정의가 만족되고 있는 클래스 하나를 만들어서 사용자 정보를 관리하고  
 그 사용자 정보를 바탕으로 필요한 기능(로그인, 로그아웃 등등)들을 Framework가 알아서 하는 것이다.    
-=> 인터페이스를 쓰면 뭐가 좋은지 고민해보기(인터페이스와 구현체를 왜 나누었을까?)
+=> 인터페이스를 쓰면 뭐가 좋은지 고민해보기(인터페이스와 구현체를 왜 나누었을까?)  
+
+`1월 26일`
 
 ## 스택
 
