@@ -1,6 +1,9 @@
 package com.example.auth.config;
 
 import com.example.auth.filters.AllAuthenticatedFilter;
+import com.example.auth.jwt.JwtTokenFilter;
+import com.example.auth.jwt.JwtTokenUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +23,10 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 // : "Bean 객체들의 설정을 담고 있는 클래스다"란 의미
 // Bean을 비롯해서 여러 설정하기 위한 Bean 객체
 @Configuration
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+  private final JwtTokenUtils jwtTokenUtils;
+
   // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
   @Bean
   // Http 관련 보안 설정하는 객체
@@ -88,8 +94,14 @@ public class WebSecurityConfig {
           .logoutSuccessUrl("/users/login")
       )
       // 특정 필터 앞에 나만의 필터를 넣는다.
-      .addFilterBefore( //  0126 5교시 36분 다시 듣기 앞에 넣는다 어쩌구 저쩌구
+     /*
+       .addFilterBefore( //  0126 5교시 36분 다시 듣기 앞에 넣는다 어쩌구 저쩌구
         new AllAuthenticatedFilter(),
+        AuthorizationFilter.class
+      )
+    */
+      .addFilterBefore(
+        new JwtTokenFilter(jwtTokenUtils),
         AuthorizationFilter.class
       )
       ;
