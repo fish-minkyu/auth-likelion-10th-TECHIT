@@ -52,6 +52,8 @@ public class WebSecurityConfig {
           .anonymous()
           .anyRequest()
           .authenticated()
+          // preHandle 테스트 해볼려고 윗부분 다 주석 처리
+          // .anyRequest().permitAll()
     )
       // html form 요소를 이용해 로그인을 시키는 설정 (가장 일반적인 방식)
       .formLogin(
