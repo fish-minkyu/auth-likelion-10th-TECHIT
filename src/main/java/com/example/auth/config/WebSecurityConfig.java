@@ -37,7 +37,8 @@ public class WebSecurityConfig {
           // 어떤 경로에 대한 설정인지
           .requestMatchers(
             "/no-auth",
-            "/users/home"
+            "/users/home",
+            "/tests"
           )
           // 이 경로에 도달할 수 있는 설정
           .permitAll()
