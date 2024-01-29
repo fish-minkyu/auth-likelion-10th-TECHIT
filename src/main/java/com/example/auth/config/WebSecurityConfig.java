@@ -31,6 +31,14 @@ public class WebSecurityConfig {
     // : 메서드 형태로 설정들을 받음
     http
       .csrf(AbstractHttpConfigurer::disable)
+      /*
+        // Security 5까지 (구버전)
+        .authorizeHttpRequests()
+          .requestMatchers("")
+          .permitAll()
+          .and()
+      */
+
       // 인증 & 인가 설정
       .authorizeHttpRequests(
         // 함수형 프로그래밍으로 어떤 것들을 적용해줄지를 메소드 형식으로 전달
@@ -40,7 +48,8 @@ public class WebSecurityConfig {
           .requestMatchers(
             "/no-auth",
             "/users/home",
-            "/tests"
+            "/tests",
+            "/token/issue"
           )
           // 이 경로에 도달할 수 있는 설정
           .permitAll()
@@ -78,7 +87,7 @@ public class WebSecurityConfig {
           .logoutSuccessUrl("/users/login")
       )
       // 특정 필터 앞에 나만의 필터를 넣는다.
-      .addFilterBefore( // 36분 다시 듣기 앞에 넣는다 어쩌구 저쩌구
+      .addFilterBefore( //  0126 5교시 36분 다시 듣기 앞에 넣는다 어쩌구 저쩌구
         new AllAuthenticatedFilter(),
         AuthorizationFilter.class
       )
