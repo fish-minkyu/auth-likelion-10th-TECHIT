@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
   private final UserDetailsManager manager;
   private final PasswordEncoder passwordEncoder;
-  // interface를 기반 DI (Strategy Pattern)
+  private final AuthenticationFacade authFacade;
+  // interface 기반 DI (Strategy Pattern)
   // private final  IUserService service;
 
   @GetMapping("/home")
@@ -28,6 +29,9 @@ public class UserController {
     //NOTE Spring에서 실행하고 있는 코드 내부에서,
     // 현재 요청에 대해서 누가 접속해서 요청하고 있는지 파악 가능
     log.info(SecurityContextHolder.getContext().getAuthentication().getName());
+    // Facade Pattern
+    log.info(authFacade.getAuth().getName());
+
     return "index";
   }
 

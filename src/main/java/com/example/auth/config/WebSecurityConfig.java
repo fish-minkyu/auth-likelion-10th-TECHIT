@@ -91,7 +91,7 @@ public class WebSecurityConfig {
   // 사용자 정보 관리 클래스
   // : formLogin 객체가 userDetailsManager 객체를 사용한다.
   // Spring Security의 요소들이 사용자가 제공한 데이터가 어떤 사용자인지 파악하는 interface다.
-  @Bean
+//  @Bean // 커스텀화하면 UserDetailsService가 필요한 곳에 Bean이 2개가 들어가기 때문에 오류를 일으킬 수 있으므로 주석 처리
   public UserDetailsManager userDetailsManager(
     PasswordEncoder passwordEncoder
   ) {

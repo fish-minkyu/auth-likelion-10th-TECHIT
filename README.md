@@ -1,6 +1,9 @@
 # Auth
 
-- 2024.01.25 `10주차`
+- 2024.01.25 ~ 01.26`10주차`
+- 01.25
+- 01.26 UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
+
 
 Spring Security를 통해 로그인을 학습하는 프로젝트다.
 
