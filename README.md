@@ -2,9 +2,9 @@
 
 - 2024.01.25 ~ 01.26`10주차`
 - 01.25 UserDetailsManager, Authentication, SecurityContextHolder, Strategy Pattern
-- 01.26 CustomUserDetails, Interceptor, Filter
+- 01.26 CustomUserDetails, CustomUserDetailsService, Interceptor, Filter - UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
 - 01.29 JWT
-UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
+- 01.30 OAuth
 
 `1월.25일`은 
 
