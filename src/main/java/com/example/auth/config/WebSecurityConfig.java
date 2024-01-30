@@ -96,9 +96,9 @@ public class WebSecurityConfig {
           .logoutSuccessUrl("/users/login")
       )
       // 특정 필터 앞에 나만의 필터를 넣는다.
-//       .addFilterBefore( //  0126 5교시 36분 다시 듣기 앞에 넣는다 어쩌구 저쩌구
+//       .addFilterBefore(
 //        new AllAuthenticatedFilter(),
-//        AuthorizationFilter.class
+//        AuthorizationFilter.class // 해당 필터 앞에다가 넣는다.
 //      )
       .addFilterBefore(
         new JwtTokenFilter(jwtTokenUtils),
