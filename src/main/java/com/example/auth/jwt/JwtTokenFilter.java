@@ -10,8 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -60,6 +62,13 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         String username = jwtTokenUtils
           .parseClaims(token)
           .getSubject();
+
+        // getAuthorities 메소드의 결과에 따라서 사용자의 권한을 확인
+        UserDetails userDetails = manager.loadUserByUsername(username);
+        for(GrantedAuthority authority : userDetails.getAuthorities()) {
+          log.info("authority: {}", authority.getAuthority());
+        }
+
         // 인증 정보 생성
         AbstractAuthenticationToken authentication =
           new UsernamePasswordAuthenticationToken(

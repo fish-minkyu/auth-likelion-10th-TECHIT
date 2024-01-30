@@ -44,11 +44,22 @@ public class JpaUserDetailsManager implements UserDetailsManager {
 */
 
     // CustomUserDetails 사용
+    // 사용자
     createUser(CustomUserDetails.builder()
-      .username("user1")
-      .password(passwordEncoder.encode("password1"))
+      .username("user")
+      .password(passwordEncoder.encode("password"))
       .email("user1@gmail.com")
       .phone("01012345678")
+      .authorities("ROLE_USER") // 향 후, 테이블을 만들어서 get하기
+      .build());
+
+    // 사용자 & 관리자
+    createUser(CustomUserDetails.builder()
+      .username("admin")
+      .password(passwordEncoder.encode("password"))
+      .email("user1@gmail.com")
+      .phone("01012345678")
+      .authorities("ROLE_USER,ROLE_ADMIN")
       .build());
   }
 
@@ -70,6 +81,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       .password(userEntity.getPassword())
       .email(userEntity.getEmail())
       .phone(userEntity.getPhone())
+      .authorities(userEntity.getAuthorities())
       .build();
 
     // UserDeatils 반환
@@ -95,6 +107,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
         .password(userDetails.getPassword())
         .email(userDetails.getEmail())
         .phone(userDetails.getPhone())
+        .authorities(userDetails.getRawAuthorities())
         .build();
       userRepository.save(newUser);
     } catch (ClassCastException e) {

@@ -133,6 +133,10 @@ public class WebSecurityConfig {
           "/users/register"
         )
         .anonymous()
+        // 일반 사용자만 접근가능
+        .requestMatchers("/users/role-user")
+        .hasRole("USER")
+
         .anyRequest()
         .permitAll()
       )
