@@ -4,7 +4,7 @@
 - 01.25 UserDetailsManager, Authentication, SecurityContextHolder, Strategy Pattern
 - 01.26 CustomUserDetails, CustomUserDetailsService, Interceptor, Filter - UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
 - 01.29 JWT
-- 01.30 Authorization, OAuth
+- 01.30 Authorization(hasRole, hasAnyRole), OAuth
 
 `1월.25일`은 
 

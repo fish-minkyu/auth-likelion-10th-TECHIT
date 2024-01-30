@@ -29,7 +29,8 @@ public class UserController {
   public String home() {
     //NOTE Spring에서 실행하고 있는 코드 내부에서,
     // 현재 요청에 대해서 누가 접속해서 요청하고 있는지 파악 가능
-    log.info(SecurityContextHolder.getContext().getAuthentication().getName());
+    log.info(SecurityContextHolder.getContext().getAuthentication() // 로그인을 안해도 오류가 나지 않음
+      .getName());
     // Facade Pattern
     log.info(authFacade.getAuth().getName());
 

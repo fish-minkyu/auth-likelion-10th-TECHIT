@@ -50,7 +50,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       .password(passwordEncoder.encode("password"))
       .email("user1@gmail.com")
       .phone("01012345678")
-      .authorities("ROLE_USER") // 향 후, 테이블을 만들어서 get하기
+      .authorities("ROLE_USER,READ_AUTHORITY") // 향 후, 테이블을 만들어서 get하기
       .build());
 
     // 사용자 & 관리자
@@ -59,7 +59,11 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       .password(passwordEncoder.encode("password"))
       .email("user1@gmail.com")
       .phone("01012345678")
-      .authorities("ROLE_USER,ROLE_ADMIN")
+      // hasRole() 사용
+      // .authorities("ROLE_USER,ROLE_ADMIN")
+      //note 인당 역할 하나 부여, hasAnyRole() 사용
+      // .authorities("ROLE_ADMIN")
+      .authorities("ROLE_ADMIN,WRITE_AUTHORITY")
       .build());
   }
 

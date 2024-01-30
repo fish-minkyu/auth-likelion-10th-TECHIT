@@ -42,6 +42,7 @@ public class CustomUserDetails implements UserDetails { // UserDetails가 사용
   //note 사용자의 권한을 파악하하는 메소드
   // 이 메소드가 무엇을 반환하는지에 따라 동작할 수 있는 서비스가 달라진다.
   // GrantedAuthority는 문자열을 반환하는 메서드 하나만 가지고 있다.
+  // => CustomUserDetails는 권한을 전달하기 위한 매개체가 된다.
   public Collection<? extends GrantedAuthority> getAuthorities() {
     // Stream
 /*    return Arrays.stream(authorities.split(","))

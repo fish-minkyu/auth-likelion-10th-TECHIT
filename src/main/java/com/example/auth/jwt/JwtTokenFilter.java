@@ -76,8 +76,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //              .username(username)
 //              .build(),
             // manager에서 실제 사용자 정보 조회
-            manager.loadUserByUsername(username),
-            token, new ArrayList<>()
+            // manager.loadUserByUsername(username),
+            userDetails,
+            token,
+            userDetails.getAuthorities() // 인증하고 나서 사용자 권한이 들어가게 된다.
           );
         // 인증 정보 등록
         context.setAuthentication(authentication);

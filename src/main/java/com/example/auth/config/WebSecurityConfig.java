@@ -110,7 +110,8 @@ public class WebSecurityConfig {
       // csrf 보안 해제
       // : form Login에서 가지고 있는 보안 취약점이다.
       .csrf(AbstractHttpConfigurer::disable)
-      // URL에 따른 요청 인가
+      // authorizeHttpRequest
+      // : URL에 따른 요청 인가, 내가 어떤 URL에 접근가능한지 설정하고 싶으면 가정 먼저 설정할 곳
       .authorizeHttpRequests(auth -> auth
         .requestMatchers(
           "/no-auth",
@@ -133,9 +134,24 @@ public class WebSecurityConfig {
           "/users/register"
         )
         .anonymous()
-        // 일반 사용자만 접근가능
-        .requestMatchers("/users/role-user")
-        .hasRole("USER")
+
+        // ROLE에 따른 접근 설정
+        .requestMatchers("/auth/user-role")
+        // .hasRole("USER") // ROLE 부분 생략하고 적어주기
+        //note 인당 역할 하나 부여 시, 관리자 권한이 사용자 권한의 기능도 사용할 수 있게 수정
+         .hasAnyRole("USER", "ADMIN")
+
+        .requestMatchers("/auth/admin-role")
+        .hasRole("ADMIN")
+
+        // AUTHORITY에 따른 접근 설정
+        .requestMatchers("/auth/read-authority")
+        // .hasAuthority("READ_AUTHORITY")
+        .hasAnyAuthority("READ_AUTHORITY", "WRITE_AUTHORITY")
+
+        .requestMatchers("/auth/write-authority")
+        .hasAuthority("WRITE_AUTHORITY")
+
 
         .anyRequest()
         .permitAll()
