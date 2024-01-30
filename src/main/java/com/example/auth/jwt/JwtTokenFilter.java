@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -22,10 +23,19 @@ import java.util.ArrayList;
 // Why? WebSecurityConfig에서 수동으로 등록을 해줘야 한다.
 // 근데 Bean으로 등록을 해주면 Spring Container가 한번 더 등록하고 Security에서 등록을 하게되면 2번 등록하게 된다.
 @Slf4j
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
   private final JwtTokenUtils jwtTokenUtils;
+  // 사용자 정보를 찾기위한 UserDetailsService 또는 Manager
+  private final UserDetailsManager manager;
 
+  public JwtTokenFilter(
+    JwtTokenUtils jwtTokenUtils,
+    UserDetailsManager manager
+  ) {
+    this.jwtTokenUtils = jwtTokenUtils;
+    this.manager = manager;
+  }
 
   @Override
   protected void doFilterInternal(
@@ -53,9 +63,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // 인증 정보 생성
         AbstractAuthenticationToken authentication =
           new UsernamePasswordAuthenticationToken(
-            CustomUserDetails.builder()
-              .username(username)
-              .build(),
+//            CustomUserDetails.builder()
+//              .username(username)
+//              .build(),
+            // manager에서 실제 사용자 정보 조회
+            manager.loadUserByUsername(username),
             token, new ArrayList<>()
           );
         // 인증 정보 등록
