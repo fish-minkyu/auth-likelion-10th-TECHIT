@@ -49,7 +49,7 @@ public class OAuth2UserServiceImpl
       attributes.put("nickname", responseMap.get("nickname"));
       attributes.put("name", responseMap.get("name"));
       attributes.put("profileImg", responseMap.get("profile_image"));
-      nameAttribute = "email"; //todo 설명 다시 듣기
+      nameAttribute = "email"; // 어떤 애를 이름으로 취급할지 써야 한다.
     }
     log.info(attributes.toString());
     return new DefaultOAuth2User(
