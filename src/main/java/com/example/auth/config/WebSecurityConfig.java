@@ -7,6 +7,7 @@ import com.example.auth.service.JpaUserDetailsManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -121,8 +122,16 @@ public class WebSecurityConfig {
           "/token/validate"
         )
         .permitAll()
+
+        .requestMatchers(HttpMethod.GET, "/articles")
+        .permitAll()
+
+        .requestMatchers(HttpMethod.POST, "/articles")
+        .authenticated()
+
         .requestMatchers("/users/my-profile")
         .authenticated()
+
         .requestMatchers(
           //NOTE JWT를 구현하면 해당 URL은 정상적으로 동작하지 않는다.
           // Why? formLogin을 염두에 두고 만든 URL인데
