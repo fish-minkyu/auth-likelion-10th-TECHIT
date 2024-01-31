@@ -36,6 +36,23 @@ public class OAuth2UserServiceImpl
     Map<String, Object> attributes = new HashMap<>();
     String nameAttribute = "";
 
+    // Kakao 아이디로 로그인
+    if (registrationId.equals("kakao")) {
+      log.info(oAuth2User.getAttributes().toString());
+      // Kakao에서 받아온 정보다.
+      attributes.put("provider", "kakao");
+      attributes.put("id", oAuth2User.getAttribute("id"));
+      Map<String, Object> kakaoAccount
+        = oAuth2User.getAttribute("kakao_account");
+      attributes.put("email", kakaoAccount.get("email"));
+
+      Map<String, Object> kakaoProfile
+        = (Map<String, Object>) kakaoAccount.get("profile");
+      attributes.put("nickname", kakaoProfile.get("nickname"));
+      attributes.put("profileImg", kakaoProfile.get("profile_image_url"));
+      nameAttribute = "email";
+    }
+
     // Naver 아이디로 로그인
     if (registrationId.equals("naver")) {
       // Naver에서 받아온 정보다.

@@ -46,7 +46,7 @@ public class OAuth2SuccessHandler
     String provider = oAuth2User.getAttribute("provider");
     String username
       = String.format("{%s}%s", provider, email);
-    String providerId = oAuth2User.getAttribute("id");
+    String providerId = oAuth2User.getAttribute("id").toString();
     // 처음으로 이 소셜 로그인으로 로그인을 시도했다.
     if (!userDetailsManager.userExists(username)) {
       // 새 계정을 만들어야 한다.

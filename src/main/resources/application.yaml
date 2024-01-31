@@ -15,20 +15,27 @@ spring:
             # 응답받은 사용자 정보 중 사용자 이름이 무엇인지 담겨있는 JSON Key
             user-name-attribute: response
 
-#            "response": {
-#              "email": "openapi@naver.com",
-#              "nickname": "OpenAPI",
-#              "profile_image": "https://ssl.pstatic.net/static/pwe/address/nodata_33x33.gif",
-#              "age": "40-49",
-#              "gender": "F",
-#              "id": "32742776",
-#              "name": "오픈 API",
-#              "birthday": "10-01",
-#              "birthyear": "1900",
-#              "mobile": "010-0000-0000"
-#            }
+            #            "response": {
+            #              "email": "openapi@naver.com",
+            #              "nickname": "OpenAPI",
+            #              "profile_image": "https://ssl.pstatic.net/static/pwe/address/nodata_33x33.gif",
+            #              "age": "40-49",
+            #              "gender": "F",
+            #              "id": "32742776",
+            #              "name": "오픈 API",
+            #              "birthday": "10-01",
+            #              "birthyear": "1900",
+            #              "mobile": "010-0000-0000"
+            #            }
 
-        # 설정 2번. 필요한 정보
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+
+        # 설정 2번. 등록을 어떻게 해놨는지에 대한 정보
         registration:
           naver:
             client-id: jp7wBNtkFGEFcFwq4CVa
@@ -43,6 +50,19 @@ spring:
               - email
               - name
               - profile_image
+
+          kakao:
+            client-id: 48f4a8770a6ceabaef5cc594e4e7127c
+            client-secret: fvPrYnQ9lQSJiRo6Xxo2zaGUuBQAAjZ5
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            client-authentication-method: client_secret_post
+            client-name: Kakao
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+
 
   datasource:
     url: jdbc:sqlite:db.sqlite
