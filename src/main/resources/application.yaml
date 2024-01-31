@@ -28,7 +28,7 @@ spring:
 #              "mobile": "010-0000-0000"
 #            }
 
-        # 설정 2번.
+        # 설정 2번. 필요한 정보
         registration:
           naver:
             client-id: jp7wBNtkFGEFcFwq4CVa

@@ -4,7 +4,8 @@
 - 01.25 UserDetailsManager, Authentication, SecurityContextHolder, Strategy Pattern
 - 01.26 CustomUserDetails, CustomUserDetailsService, Interceptor, Filter - UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
 - 01.29 JWT
-- 01.30 Authorization, OAuth - Naver
+- 01.30 Authorization, OAuth - Naver (13:00 ~ 16:00)
+- 01.31 OAuth - Kakao
 
 `1월.25일`은 
 
@@ -50,7 +51,5 @@ interface를 기반 커스터마이징 (Strategy Pattern),
 ## Key Point
 
 
-## 복습
-2024.01.27 로그인 복습  
-2024.01.28 로그아웃, 회원가입 복습
+
 

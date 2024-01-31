@@ -2,7 +2,6 @@ package com.example.auth.oauth;
 
 import com.example.auth.entity.CustomUserDetails;
 import com.example.auth.jwt.JwtTokenUtils;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,7 +35,6 @@ public class OAuth2SuccessHandler
   public void onAuthenticationSuccess(
     HttpServletRequest request,
     HttpServletResponse response,
-    FilterChain chain,
     Authentication authentication // SecurityContext와 동일, 차이점은 DefaultOAuth2User가 담겨져있다.
   ) throws IOException, ServletException {
     // OAuth2UserServiceImpl의 반환값이 할당된다.
