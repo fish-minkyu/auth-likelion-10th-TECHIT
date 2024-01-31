@@ -165,6 +165,12 @@ public class WebSecurityConfig {
         .anyRequest()
         .permitAll()
       )
+      // OAuth 설정
+      .oauth2Login(oauth2Login -> oauth2Login
+        .loginPage("/users/login")
+      )
+
+
     // JWT를 사용하기 때문에 보안 관련 세션 해제
       .sessionManagement(session -> session
         // 세션을 저장하지 않는다. 즉 세션 기반 인증은 사용하지 않겠다. (stateless)
