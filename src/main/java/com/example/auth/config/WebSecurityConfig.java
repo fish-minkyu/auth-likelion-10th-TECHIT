@@ -116,7 +116,7 @@ public class WebSecurityConfig {
       // : form Login에서 가지고 있는 보안 취약점이다.
       .csrf(AbstractHttpConfigurer::disable)
       // authorizeHttpRequest
-      // : URL에 따른 요청 인가, 내가 어떤 URL에 접근가능한지 설정하고 싶으면 가정 먼저 설정할 곳
+      // : URL에 따른 요청 인가, 내가 어떤 URL에 접근가능한지 설정하고 싶으면 가장 먼저 설정할 곳
       .authorizeHttpRequests(auth -> auth
         .requestMatchers(
           "/no-auth",

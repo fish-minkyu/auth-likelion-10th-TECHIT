@@ -35,7 +35,7 @@ public class LoggingInterceptor implements HandlerInterceptor { // HandlerInterc
     // 그래서 Controller의 RequestBody를 채우려고 할 떼 에러가 발생한다.
 
     // Enumeration
-    // : 나열된 데이터를 나타내기위한 인터페이스
+    // : 나열된 데이터를 나타내기 위한 인터페이스
     Enumeration<String> headerNames = request.getHeaderNames();
     // 요청 헤더를 로그로 남기는 로직
     while (headerNames.hasMoreElements()) {

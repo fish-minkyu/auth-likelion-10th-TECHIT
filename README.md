@@ -1,6 +1,6 @@
 # Auth
 
-- 2024.01.25 ~ 01.26`10주차`
+- 2024.01.25 ~ 01.31 `10주차`
 - 01.25 UserDetailsManager, Authentication, SecurityContextHolder, Strategy Pattern
 - 01.26 CustomUserDetails, CustomUserDetailsService, Interceptor, Filter - UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
 - 01.29 JWT
@@ -37,6 +37,9 @@ interface를 기반 커스터마이징 (Strategy Pattern),
 => 인터페이스를 쓰면 뭐가 좋은지 고민해보기(인터페이스와 구현체를 왜 나누었을까?)  
 
 `1월 26일`
+
+
+이 프로젝트는 local Login, JWT, OAuth 별로 패키지를 나누도록 리팩토링할 것이다.
 
 ## 스택
 
