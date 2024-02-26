@@ -40,7 +40,7 @@ public class JwtTokenUtils {
 
   // UserDetails를 받아서 JWT로 변환하는 메서드
   public String generateToken(UserDetails userDetails) {
-    // JWT를 담고싶은 정보를 Claims로 만든다.
+    // JWT에 담고싶은 정보를 Claims로 만든다.
     // sub: 누구인지
     // iat: 언제 발급 되었는지
     // exp: 언제 만료 예정인지

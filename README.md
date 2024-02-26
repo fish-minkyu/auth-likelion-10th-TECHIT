@@ -39,7 +39,10 @@ interface를 기반 커스터마이징 (Strategy Pattern),
 `1월 26일`
 
 
-이 프로젝트는 local Login, JWT, OAuth 별로 패키지를 나누도록 리팩토링할 것이다.
+이 프로젝트는 localLogin, JWT, OAuth 별로 3가지 방법으로 패키지를 나누도록 리팩토링할 것이다.
+우선 강의를 다시 처음부터 끝까지 듣는다.
+요일 별로 사용했던 패키지를 토글로 남긴다.
+파일명은 강의에서 사용한 파일명 + "Local" or "Jwt" or "OAuth"로 한다.
 
 ## 스택
 
@@ -48,6 +51,7 @@ interface를 기반 커스터마이징 (Strategy Pattern),
 - Spring Security
 - Lombok
 - Thymeleaf
+- Thymeleaf - springsecurity6
 - Jjwt
 - oauth2-client
 
