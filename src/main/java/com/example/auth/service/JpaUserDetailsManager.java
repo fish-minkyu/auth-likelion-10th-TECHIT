@@ -133,7 +133,6 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     return userRepository.existsByUsername(username);
   }
 
-
   // 나중에..
   @Override
   public void updateUser(UserDetails user) {

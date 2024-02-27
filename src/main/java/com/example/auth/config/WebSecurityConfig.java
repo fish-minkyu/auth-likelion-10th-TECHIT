@@ -191,7 +191,6 @@ public class WebSecurityConfig {
         ),
         AuthorizationFilter.class
       )
-
       ;
     // 어떤 경로는 접근해도 되고 어떤 경로는 접근하면 안된다란 설정
     return http.build();  // builder pattern을 사용하고 있다.
