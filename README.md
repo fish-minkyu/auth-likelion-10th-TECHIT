@@ -1,4 +1,4 @@
-# Auth
+# Spring Security
 
 - 2024.01.25 ~ 01.31 `10주차`
 - 01.25 UserDetailsManager, Authentication, SecurityContextHolder, Strategy Pattern
@@ -6,6 +6,8 @@
 - 01.29 JWT
 - 01.30 Authorization, OAuth - Naver (13:00 ~ 16:00)
 - 01.31 OAuth - Kakao
+
+<hr>
 
 `1월.25일`은 
 
