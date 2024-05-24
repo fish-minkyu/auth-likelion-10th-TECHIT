@@ -1,12 +1,14 @@
 package com.example.security.config;
 
 
+import com.example.security.filters.AllAuthenticatedFilter;
 import com.example.security.jwt.JwtTokenUtils;
 import com.example.security.oauth.OAuth2SuccessHandler;
 import com.example.security.oauth.OAuth2UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 // Spring Security는 대부분 설정으로 이뤄진다.
 
@@ -25,10 +28,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-  private final JwtTokenUtils jwtTokenUtils;
   private final UserDetailsManager manager;
-  private final OAuth2UserServiceImpl oAuth2UserService;
-  private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
   // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
   @Bean
@@ -46,15 +46,18 @@ public class WebSecurityConfig {
       // 설정을 진행되는 인자를 메서드 형태로 받는 것이다.
       auth -> auth
           // 어떤 경로에 대한 설정인지
-          .requestMatchers("/no-auth",
-              "/formLogin-users/home")
+          .requestMatchers(
+              "/no-auth",
+              "/users/home",
+              "/tests/**"
+          )
           // 이 경로에 도달할 수 있는 사람에 대한 설정
           .permitAll() // 모두
-          .requestMatchers("/formLogin-users/my-profile")
+          .requestMatchers("/users/my-profile")
           .authenticated() // 인증
           .requestMatchers(
-              "/formLogin-users/login",
-              "/formLogin-users/register"
+              "/users/login",
+              "/users/register"
           )
           .anonymous()
           .anyRequest()
@@ -65,19 +68,27 @@ public class WebSecurityConfig {
       formLogin -> formLogin
           // 어떤 경로(URL)로 요청을 보내면
           // 로그인 페이지가 나오는지
-          .loginPage("/formLogin-users/login")
+          .loginPage("/users/login")
           // 아무 설정없이 로그인에 성공한 뒤, 이동할 URL
-          .defaultSuccessUrl("/formLogin-users/my-profile")
+          .defaultSuccessUrl("/users/my-profile")
           // 실패시 이동할 URL
-          .failureUrl("/formLogin-users/login?fail")
+          .failureUrl("/users/login?fail")
     )
         // 로그아웃 설정
         .logout(
             logout -> logout
             // 어떤 경로(URL)로 요청을 보내면 로그아웃이 되는지(사용자의 세션을 삭제할지)
-            .logoutUrl("/formLogin-users/logout")
+            .logoutUrl("/users/logout")
             // 로그아웃 성공시 이동할 페이지
-            .logoutSuccessUrl("/formLogin-users/login"))
+            .logoutSuccessUrl("/users/home"))
+
+        // 특정 필터 앞에 나만의 필터를 넣는다.
+        .addFilterBefore(
+            // 넣을 필터
+            new AllAuthenticatedFilter(),
+            // 특정 필터
+            AuthorizationFilter.class
+        )
     ;
 
     return http.build();
@@ -91,7 +102,7 @@ public class WebSecurityConfig {
 
   // formLogin 방식은 UserDetailsManager를 사용하고 있다.
   // UserDetailsManager: 사용자 정보 관리 클래스
-  @Bean
+//  @Bean // Bean을 해제한 이유는 Spring Container는 Bean을 타입으로 우선 주입하는데 JPAUserDetailsManager가 UserDetailsManager 인터페이스의 구현 클래스여서
   public UserDetailsManager userDetailsManager() {
     // 사용자 1
     UserDetails user1 = User.withUsername("user1")

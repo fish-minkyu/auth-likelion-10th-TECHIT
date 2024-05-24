@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/tests")
 public class TestController {
-  // 요청을 보냈을 때 header와 body가 뭐뭐 있는지 Filter와 Interceptor로 확인해보자
+  // 요청을 보냈을 때 요청 header와 body가 뭐뭐 있는지 Filter와 Interceptor로 확인해보자
   @GetMapping
   public String test() {
     return "done";

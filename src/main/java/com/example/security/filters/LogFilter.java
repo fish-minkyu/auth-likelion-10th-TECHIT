@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Slf4j
-@Component // Filter는 @Component로 등록하면 Spring Boot가 자동을 Filter로 등록해준다.
+@Component // Filter는 @Component로 등록하면 Spring Boot가 자동으로 Filter로 등록해준다.
 public class LogFilter implements Filter {
 
   @Override

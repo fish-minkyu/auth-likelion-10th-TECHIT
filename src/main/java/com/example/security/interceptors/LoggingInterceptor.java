@@ -29,10 +29,11 @@ public class LoggingInterceptor implements HandlerInterceptor { // HandlerInterc
     HandlerMethod handlerMethod = (HandlerMethod) handler;
     log.info("pre handling of {}", handlerMethod.getMethod().getName());
 
-    // body를 읽는 것을 막는 건 없으나..
-//    request.getReader().lines().forEach(log::info); // body를 조회함으로써 body가 사라지게 됨으로 에러가 발생 됨
-    // HttpServletRequest의 body는 한번밖에 읽지 못한다.
-    // 그래서 Controller의 RequestBody를 채우려고 할 떼 에러가 발생한다.
+    // request.getReader()는 파일의 I/O 처럼 I/O가 일어난다.
+    // 그래서 Request Body를 읽었으므로 읽어야 할 Body 데이터는 당연히 사라지게 된다.
+    // 하지만, TestController의 testBody Handler Mapping에서 testDto를 읽어야 하는데
+    // 읽어야 할 Body 데이터가 사라졌으므로 에러가 발생하게 된다.
+//    request.getReader().lines().forEach(log::info);
 
     // Enumeration
     // : 나열된 데이터를 나타내기 위한 인터페이스

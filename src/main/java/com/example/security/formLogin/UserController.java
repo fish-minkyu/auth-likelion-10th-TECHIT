@@ -1,11 +1,12 @@
 package com.example.security.formLogin;
 
+import com.example.security.AuthenticationFacade;
+import com.example.security.entity.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
@@ -19,10 +20,11 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/formLogin-users")
-public class formLoginUserController {
-  private final UserDetailsManager manager;
+@RequestMapping("/users")
+public class UserController {
+  private final UserDetailsManager manager; // JpaUserDetailsManager (다형성으로 주입 가능)
   private final PasswordEncoder passwordEncoder;
+  private final AuthenticationFacade authFacade;
   // interface 기반 DI (Strategy Pattern)
   // private final IUserService userService;
 
@@ -31,6 +33,7 @@ public class formLoginUserController {
     //NOTE. Spring에서 실행하고 있는 코드 내부에서,
     // 현재 요청에 대해서 누가 접속해서 요청하고 있는지 파악 가능
     log.info(SecurityContextHolder.getContext().getAuthentication().getName());
+    log.info(authFacade.getAuth().getName());
     return "index";
   }
 
@@ -43,9 +46,7 @@ public class formLoginUserController {
   @GetMapping("/my-profile")
   public String myProfile(
       //NOTE. Authentication authentication
-      // : Spring Request Mapping Handler가 지원하는 메서드 중 하나,
-      // 메서드에 도달할 때 필요로하는 매개변수 타입을 Spring Boot가 알아서 넣어준다는 뜻
-      // => 여기선 누가 접속했는지 알려준다.
+      // : 현재 접근하는 주체의 정보와 권한을 담는 인터페이스다.
       Authentication authentication,
       Model model
   ) {
@@ -53,9 +54,12 @@ public class formLoginUserController {
 
     // 사용자 이름 출력
     log.info(authentication.getName());
-    // getPrincipal
+    // getPrincipal (반환타입은 Principal, Principal은 사용자 정보가 담겨져 있다)
     // : UserDetailsManager에서 사용하고 있는 User 객체 정보가 Principal에 담겨 있다.
-    log.info(((User) authentication.getPrincipal()).getUsername());
+//    log.info(((User) authentication.getPrincipal()).getUsername());
+
+    //Note. CustomUserDetails를 사용하면 커스텀한 사용자의 정보를 가져올 수 있음을 기대할 수 있다.
+    log.info(((CustomUserDetails) authentication.getPrincipal()).getPassword());
     return "my-profile";
   }
 
@@ -76,12 +80,19 @@ public class formLoginUserController {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 
-    // 주어진 정보를 바탕으로 새로운 사용자 생성
-    manager.createUser(
+    // 회원가입 시, 사용자의 정보를 직접 다루고 싶다면 CustomUserDetails 사용
+    // CustomUserDetails 사용
+    manager.createUser(CustomUserDetails.builder()
+            .username(username)
+            .password(passwordEncoder.encode(password))
+            .build());
+
+    // User 사용, 주어진 정보를 바탕으로 새로운 사용자 생성
+/*    manager.createUser(
         User.withUsername(username)
         .password(passwordEncoder.encode(password))
         .build()
-    );
+    );*/
 
     // 회원가입 성공 후 로그인 페이지로
     return "redirect:/formLogin-users/login";

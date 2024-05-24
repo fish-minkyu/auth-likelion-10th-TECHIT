@@ -14,8 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
-// 커스텀 UserDetailsManager
-// => Jpa에 등록되어 있는 사용자를 가져올 수 있게끔 UserDetailsService를 만든 것이다.
+// JPAUserDetailsManager(= 커스텀 UserDetailsManager)
+// => JPA에 등록되어 있는 사용자를 가져올 수 있게끔 UserDetailsService를 만든 것이다.
 @Slf4j
 // @RequiredArgsConstructor // 테스트 목적이어서 지움
 @Service
@@ -24,12 +24,14 @@ public class JpaUserDetailsManager implements UserDetailsManager {
 
   public JpaUserDetailsManager(
     UserRepository userRepository,
-    // 내부에서 암호화를 진행하지 않고 외부에서 암호화된 비밀번호를 전달해줬다고 가정
+    // createUser 메소드 내부에서 암호화를 진행하지 않고 외부에서 암호화된 비밀번호를 전달해줬다고 가정
     // So, 의존성으로 추가될 필요가 없다.
+    // Because, createUser 메소드 내부에서 암호화 사용 시, passwordEncoder가 필드로서 의존성 주입을 해줘야 하지만
+    // 이렇게 생성자에서만 사용을 한다면 의존성 주입을 해줄 필요가 없다.
     PasswordEncoder passwordEncoder
   ) {
-    // 오롯이 테스트 목적의 사용자를 추가하는 용도
     this.userRepository = userRepository;
+    // 오롯이 테스트 목적의 사용자를 추가하는 용도
     // UserDetails 사용
 /*    createUser(User.withUsername("user1")
       .password(passwordEncoder.encode("password1"))
@@ -59,7 +61,7 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       .phone("01012345678")
       // hasRole() 사용
       // .authorities("ROLE_USER,ROLE_ADMIN")
-      //note 인당 역할 하나 부여, hasAnyRole() 사용
+      //Note. 인당 역할 하나 부여, hasAnyRole() 사용
       // .authorities("ROLE_ADMIN")
       .authorities("ROLE_ADMIN,WRITE_AUTHORITY")
       .build());
@@ -73,7 +75,8 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       = userRepository.findByUsername(username);
 
     if (optionalUser.isEmpty())
-      throw new UsernameNotFoundException(username); // UserDetailsService의 에러 객체
+      // UserDetailsService의 에러 객체, UserDetailsService 인터페이스의 규약에서 명시된 에러이므로 사용.
+      throw new UsernameNotFoundException(username);
 
     UserEntity userEntity = optionalUser.get();
 
@@ -101,9 +104,13 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       // ResponseStatusException()을 쓰는게 맞다.
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
+    // CustomUserDetails 사용
     try {
       CustomUserDetails userDetails
         = (CustomUserDetails) user; // user는 UserDetails다.
+      // UserDetails와 UserEntity는 의미상, 서로 같아야 하므로 createUser 메소드 내부에서 암호화를 해주는 것이 아닌
+      // (그럼 UserDetails와 UserEntity는 비밀번호가 서로 다르므로 서로 같은 객체라고 보기 어렵다.)
+      // 외부에서 비밀번호를 암호화해서 넣어주는 것이 맞다.
       UserEntity newUser = UserEntity.builder()
         .username(userDetails.getUsername())
         .password(userDetails.getPassword())

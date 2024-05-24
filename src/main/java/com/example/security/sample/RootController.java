@@ -23,4 +23,3 @@ public class RootController {
     return "auth success!";
   }
 }
-
