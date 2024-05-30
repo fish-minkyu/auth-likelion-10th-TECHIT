@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
@@ -55,7 +56,7 @@ public class UserController {
     // 사용자 이름 출력
     log.info(authentication.getName());
     // getPrincipal (반환타입은 Principal, Principal은 사용자 정보가 담겨져 있다)
-    // : UserDetailsManager에서 사용하고 있는 User 객체 정보가 Principal에 담겨 있다.
+    // : 인터페이스 UserDetailsManager에서 사용하고 있는 User 객체 정보가 Principal에 담겨 있다.
 //    log.info(((User) authentication.getPrincipal()).getUsername());
 
     //Note. CustomUserDetails를 사용하면 커스텀한 사용자의 정보를 가져올 수 있음을 기대할 수 있다.
@@ -95,6 +96,6 @@ public class UserController {
     );*/
 
     // 회원가입 성공 후 로그인 페이지로
-    return "redirect:/formLogin-users/login";
+    return "redirect:/users/login";
   }
 }

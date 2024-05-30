@@ -50,6 +50,7 @@ public class AllAuthenticatedFilter extends OncePerRequestFilter { // OncePerReq
         // : 사용자의 계정과 비밀번호가 일치되었을 때, 만들어지는 Authentication이다.
         new UsernamePasswordAuthenticationToken(
           CustomUserDetails.builder()
+            // 사용자의 요청의 x-likelion-all-auth 헤더에 따라 username을 바꿔보자
             .username(header)
             .password("아무거나")
             .phone("010-1234-5678")

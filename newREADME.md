@@ -22,7 +22,7 @@
 <summary><strong>01/25 Form Login</strong></summary>
 
 - `WebSecurityConfig`: formLogin 설정
-- `RootController`: Spring Security 기본 로그인 화면(JWT를 추가하면 나오지 않는다.)
+- `RootController`: Spring Security 기본 로그인 화면(WebSecurityConfig 추가하면 나오지 않는다.)
 - `UserController`: Form Login 컨트롤러
 - `login-form.html`: 로그인 페이지
 - `register-form.html`: 회원가입 페이지

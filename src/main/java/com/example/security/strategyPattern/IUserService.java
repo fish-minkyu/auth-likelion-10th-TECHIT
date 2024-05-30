@@ -1,4 +1,4 @@
-package com.example.security;
+package com.example.security.strategyPattern;
 
 public interface IUserService {
   void createUser();

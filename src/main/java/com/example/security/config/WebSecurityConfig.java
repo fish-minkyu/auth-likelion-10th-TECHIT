@@ -5,6 +5,7 @@ import com.example.security.filters.AllAuthenticatedFilter;
 import com.example.security.jwt.JwtTokenUtils;
 import com.example.security.oauth.OAuth2SuccessHandler;
 import com.example.security.oauth.OAuth2UserServiceImpl;
+import com.example.security.service.JpaUserDetailsManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,7 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
   private final UserDetailsManager manager;
+  private final JpaUserDetailsManager jpa;
 
   // 메서드의 결과를 Bean 객체로 관리해주는 어노테이션
   @Bean
@@ -92,26 +94,6 @@ public class WebSecurityConfig {
     ;
 
     return http.build();
-  }
-
-  // 비밀번호 암호화 클래스
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
-  // formLogin 방식은 UserDetailsManager를 사용하고 있다.
-  // UserDetailsManager: 사용자 정보 관리 클래스
-//  @Bean // Bean을 해제한 이유는 Spring Container는 Bean을 타입으로 우선 주입하는데 JPAUserDetailsManager가 UserDetailsManager 인터페이스의 구현 클래스여서
-  public UserDetailsManager userDetailsManager() {
-    // 사용자 1
-    UserDetails user1 = User.withUsername("user1")
-        .password(passwordEncoder().encode("password1"))
-        .build();
-
-    // Spring Security에서 기본으로 제공하는,
-    // 메모리 기반 사용자 관리 클래스 + 사용자 1
-    return new InMemoryUserDetailsManager(user1);
   }
 }
 
