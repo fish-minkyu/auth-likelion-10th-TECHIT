@@ -1,6 +1,6 @@
 package com.example.security.service;
 
-import com.example.security.entity.CustomUserDetails;
+import com.example.security.common.CustomUserDetails;
 import com.example.security.entity.UserEntity;
 import com.example.security.repo.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -31,17 +31,6 @@ public class JpaUserDetailsManager implements UserDetailsManager {
     PasswordEncoder passwordEncoder
   ) {
     this.userRepository = userRepository;
-    // 오롯이 테스트 목적의 사용자를 추가하는 용도
-    // UserDetails 사용
-/*    createUser(User.withUsername("user1")
-      .password(passwordEncoder.encode("password1"))
-      .build()
-    );
-    createUser(User.withUsername("user2")
-      .password(passwordEncoder.encode("password2"))
-      .build()
-    );
-*/
 
     // CustomUserDetails 사용
     // 사용자
@@ -88,12 +77,6 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       .phone(userEntity.getPhone())
       .authorities(userEntity.getAuthorities())
       .build();
-
-    // UserDeatils 반환
-/*    return User.withUsername(username)
-      .password(optionalUser.get().getPassword())
-      .build();
-*/
   }
 
   @Override
@@ -123,14 +106,6 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       log.error("Failed Cast to: {}", CustomUserDetails.class);
       throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-      // UserDetails 사용
-/*    UserEntity userEntity = UserEntity.builder()
-      .username(user.getUsername())
-      .password(user.getPassword()) // user.getPassword()는 암호화된 비밀번호다. (UserController에서 암호화가 되어 넘어왔다.)
-      .build();
-    userRepository.save(userEntity);
-*/
   }
 
   @Override

@@ -1,13 +1,12 @@
 package com.example.security.formLogin;
 
-import com.example.security.AuthenticationFacade;
-import com.example.security.entity.CustomUserDetails;
+import com.example.security.common.AuthenticationFacade;
+import com.example.security.common.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;

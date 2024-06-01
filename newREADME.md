@@ -21,6 +21,7 @@
 <details>
 <summary><strong>01/25 Form Login</strong></summary>
 
+<새로 생성한 파일>
 - `WebSecurityConfig`: formLogin 설정
 - `RootController`: Spring Security 기본 로그인 화면(WebSecurityConfig 추가하면 나오지 않는다.)
 - `UserController`: Form Login 컨트롤러
@@ -36,7 +37,7 @@
 <details>
 <summary><strong>01/26 Form Login + JWT</strong></summary>
 
-- `WebSecurityConfig`: "/tests" 경로 추가를 위해 설정, AllAuthenticatedFilter 등록
+<새로 생성한 파일>
 - `AuthenticationFacade`: Facade Pattern을 이용한 클래스 파일
 - `UserRepository`: DB에 저장하기 위해
 - `UserEntity`: DB에 저장하기 위해
@@ -48,6 +49,24 @@
 - `TestDto`: Body 데이터를 읽기 위해 만들었다.
 - `LogFilter`: Filter를 이용해 Log 찍어보기
 - `AllAuthenticatedFilter`: Custom Filter 만들어보기
+
+<편집 파일>
+- `WebSecurityConfig`: "/tests" 경로 추가를 위해 설정, AllAuthenticatedFilter 등록
 </details>
 
+<details>
+<summary><strong>01/29 JWT</strong></summary>
+
+<새로 생성한 파일>
+- `JwtTokenUtils`: JWT 자체와 관련된 기능을 만드는 곳
+- TokenController: JwtTokenUtils를 활용하는 엔드포인트
+- JwtRequestDto
+- JwtResponseDto
+- JwtTokenFilter: JWT 토큰으로 인증을 하는 필터
+- PasswordEncoderConfig
+
+<편집 파일>
+- WebSecurityConfig: JWT 로그인 설정으로 변경
+- application.yaml: JWT 암호키 설정
+</details>
 

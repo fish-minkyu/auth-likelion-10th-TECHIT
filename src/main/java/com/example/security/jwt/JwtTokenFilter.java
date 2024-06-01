@@ -17,6 +17,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 // 인증 관련 객체는 Bean 객체로 등록하지 않는다. (Bean 객체로 등록하면 자동으로 Filter로 등록이 된다.)
@@ -26,7 +27,7 @@ import java.io.IOException;
 // @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
   private final JwtTokenUtils jwtTokenUtils;
-  // 사용자 정보를 찾기위한 UserDetailsService 또는 Manager
+  // 사용자 정보를 찾기위한 UserDetailsService 또는 UserDetailsManager
   private final UserDetailsManager manager;
 
   public JwtTokenFilter(
@@ -56,7 +57,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
       // 3. Token이 유효한 토큰인지 검사
       if (jwtTokenUtils.validate(token)) {
-
         // 4. 유효하다면 해당 토큰을 바탕으로 사용자 정보를 SecurityContext에 등록
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         // 사용자 정보 회수
@@ -76,6 +76,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 //            CustomUserDetails.builder()
 //              .username(username)
 //              .build(),
+//              token,
+//              new ArrayList<>()
             // manager에서 실제 사용자 정보 조회
             // manager.loadUserByUsername(username),
             userDetails,
@@ -96,6 +98,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     // 5. 다음 필터 호출
     // doFilter를 호출하지 않으면 Controller까지 요청이 도달하지 못한다.
+    // 인증 성공 유무에 상관없이 다음 필터를 호출해줘야 한다.
     filterChain.doFilter(request, response);
   }
 }

@@ -1,6 +1,6 @@
 package com.example.security.oauth;
 
-import com.example.security.entity.CustomUserDetails;
+import com.example.security.common.CustomUserDetails;
 import com.example.security.jwt.JwtTokenUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

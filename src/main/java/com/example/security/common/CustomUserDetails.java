@@ -1,5 +1,6 @@
-package com.example.security.entity;
+package com.example.security.common;
 
+import com.example.security.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.example.security.filters;
 
-import com.example.security.entity.CustomUserDetails;
+import com.example.security.common.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,11 +15,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-// Bean으로 등록해주지 않는다.
-// : 상황에 따라 Bean으로 등록하면 안해줘야 하는 상황이 있을 수 있다.
-// 왜냐하면 해당 객체는 Filter이므로 Spring Boot에서 관리하는 것이 아니므로
-// 인증 관련된 필터만큼은 Bean으로 사용하지 않고
-// Spring Security에서 수동으로 만들어서 등록하는 것이 관습이다.
+
+// 인증 관련된 필터는 Bean으로 등록해주지 않는다.
+// Spring Security에서 수동으로 필터를 등록하는 것이 관습이다.(WebSecurityFilterChain에 등록)
+// : 그 이유는, Bean 객체로 등록하게될 경우, Spring Container가 필터를 검색하여 등록하고
+// Spring Security에서 필터를 다시 등록을 해서 똑같은 필터가 두번 등록될 수 있기 때문이다.
 
 // 모든 요청이 인증된 요청으로 취급하는 필터 (실제 서비스에서는 등장해선 안되는 필터)
 @Slf4j

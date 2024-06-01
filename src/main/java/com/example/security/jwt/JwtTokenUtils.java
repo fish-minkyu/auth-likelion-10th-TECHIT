@@ -15,7 +15,7 @@ import java.time.Instant;
 
 // JWT 자체와 관련된 기능을 만드는 곳
 @Slf4j
-@Component // 여러가지 기능을 담아놓는 클래스라고 생각해서 Component를 넣어줬다.
+@Component // 직접적인 비즈니스 로직보단 여러가지 기능을 담아놓는 클래스라고 생각해서 Service 대신 Component를 넣어줬다.
 public class JwtTokenUtils {
   // JWT를 만드는 용도의 암호키
   private final Key signingKey;
@@ -38,6 +38,7 @@ public class JwtTokenUtils {
   }
 
   // UserDetails를 받아서 JWT로 변환하는 메서드
+  // UserDetails를 받아서 사용하는 이유는, Spring Security에서 UserDetails를 사용하고 있기 때문이다.
   public String generateToken(UserDetails userDetails) {
     // JWT에 담고싶은 정보를 Claims로 만든다.
     // sub: 누구인지
@@ -62,12 +63,10 @@ public class JwtTokenUtils {
       // exp: 언제 만료 예정인지
       .setExpiration(Date.from(now.plusSeconds(60 * 60 * 24 * 7))); // 일주일
 
-      //note JWT 토큰에 정보 추가하기
       // 일반적인 JWT 외의 정보를 포함하고 싶다면
-      // Map.put 사용 가능
+      // Map.put 사용 가능(Map을 상속 받음)
   /*
-      jwtClaims // Map을 상속 받음
-      .put("test", "claims");
+      jwtClaims.put("test", "claims");
   */
 
     // 최종적으로 JWT를 발급한다.
@@ -80,7 +79,8 @@ public class JwtTokenUtils {
   // 정상적인 JWT인지를 판단하는 메서드
   public boolean validate(String token) {
     try {
-      // 정상적이지 않은 JWT라면 예외(Exception)가 발생한다.
+      // Json Web Signature
+      // : Signature까지 확인하며, 정상적이지 않은 JWT라면 예외(Exception)가 발생한다.
       jwtParser.parseClaimsJws(token);
       return true;
     } catch (Exception e) {
