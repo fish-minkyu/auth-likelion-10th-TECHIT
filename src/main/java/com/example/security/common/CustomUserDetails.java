@@ -15,7 +15,7 @@ import java.util.*;
 
 // CustomUserDetails.
 // : UserEntity를 바탕으로 Spring Security 내부에서
-// 사용자 정보를 주고받기 위한 객체임을 나타내는 interface UserDetails의 커스텀 구현체(UserEntity를 묘사한 객체)
+// 사용자 정보를 주고받기 위한 객체임을 나타내는 interface UserDetails의 커스텀 구현체 (UserEntity를 묘사한 객체)
 
 // 만든 이유.
 // : UserEntity에 있는 정보들을 나중에 주고 받을 일이 있을 때,
@@ -63,6 +63,8 @@ public class CustomUserDetails implements UserDetails { // UserDetails가 사용
     }
 
     return grantedAuthorities;
+
+    // 무조건 ROLE_USER가 나오도록 설정
     // return List.of(new SimpleGrantedAuthority("ROLE_USER"));
   }
   // +) getAuthorities는 규약상으로 null을 반환하면 안된다.

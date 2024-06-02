@@ -20,6 +20,10 @@ public class ArticleDto {
   @Setter
   private String writer; // writer의 username
 
+  // +) 사용자 등급에 따라 할 수 있는 기능을 나눌 수도 있다.
+  // 데이터를 찍어보면 중첩되어서 Json이 나오게 된다.
+  // private ArticleWriterDto writer;
+
   // static factory method
   public static ArticleDto fromEntity(Article entity) {
     return ArticleDto.builder()
@@ -29,9 +33,4 @@ public class ArticleDto {
       .writer(entity.getWriter().getUsername())
       .build();
   }
-
-
-
-  // +) 중첩되어서 Json이 나오게 된다.
-//  private ArticleWriterDto writer;
 }

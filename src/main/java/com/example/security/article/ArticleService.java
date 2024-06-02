@@ -20,16 +20,8 @@ public class ArticleService {
   private final ArticleRepository articleRepository;
   private final UserRepository userRepository;
 
-  // SecurityContextHolder를 이용하면 어디서든지 User의 정보를 받아올 수 있다.
   public ArticleDto create(ArticleDto dto) {
-/*    // SecurityContextHolder에서 사용자 가져오기
-    UserDetails userDetails =
-      (UserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-    // 사용자 username 받아오기
-    String username = userDetails.getUsername();
-    // UserEntity 회수
-    UserEntity writer = userRepository.findByUsername(username)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));*/
+
     UserEntity writer = getUserEntity();
 
     // UserEnity 설정
@@ -45,10 +37,13 @@ public class ArticleService {
   }
 
   // 사용자 정보 가져오기 - SecurityContextHolder에서 사용자 가져오기
+  // : SecurityContextHolder 를 이용하면 어디서든지 User의 정보를 받아올 수 있다.
   private UserEntity getUserEntity() {
     UserDetails userDetails =
       (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+    // Authentication -> UserDetails로 형변환을 해줬기에
+    // getUsername이 반드시 있을 것이라 기대할 수 있다.
     return userRepository.findByUsername(userDetails.getUsername())
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
   }

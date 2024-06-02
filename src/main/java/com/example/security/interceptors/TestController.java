@@ -1,4 +1,4 @@
-package com.example.security;
+package com.example.security.interceptors;
 
 import com.example.security.interceptors.TestDto;
 import lombok.extern.slf4j.Slf4j;

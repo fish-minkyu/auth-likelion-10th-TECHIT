@@ -1,52 +1,10 @@
 # Spring Security
 
 - 2024.01.25 ~ 01.31 `10주차`
-- 01.25 UserDetailsManager, Authentication, SecurityContextHolder, Strategy Pattern
-- 01.26 CustomUserDetails, CustomUserDetailsService, Interceptor, Filter - UserDetailsManager, UserDetails을 커스텀화하여 DB에 사용자 정보 저장
-- 01.29 JWT
-- 01.30 Authorization, OAuth - Naver (13:00 ~ 16:00)
-- 01.31 OAuth - Kakao
+- 01.25 Form Login
+- 01.26: Form Login + JWT
 
-<hr>
-
-`1월.25일`은 
-
-Spring Security를 통해 로그인을 학습하는 프로젝트다.
-
-`쿠키와 세션`
-
-`UserDetailsManager`  
-UserDetailsManager를 새로 만들 수 있다.  
-개발자가 커스텀한 UserDetailsManager를 사용한다면   
-사용자 계정 정보를 어떻게 관리 및 활용할 것인지 마음대로 편집할 수 있다.
-
-다음엔 UserDetailsManager을 새로 만들어서 DB에 저장하고 사용자 정보를 관리를 할 것이다.
-
-이것이 바로 인터페이스를 기반으로 코딩을 했을 때, 가져올 수 있는 장점이다.  
-뒤쪽에 있는 구현체가 어떻든 간에 개발자는 이 기능을 믿고 사용할 수 있다.  
-그리고 실제로 어떻게 동작할지는 그 인터페이스를 구현한 개발자가 해줄 수 있다.
-
-`SecurityContextHolder.getContext().getAuthentication().getName()`
-
-`Authentication`
-
-`Strategy Pattern`
-interface를 기반 커스터마이징 (Strategy Pattern),  
-일반적으로 인터페이스를 쓰고 인터페이스 구현체를 만들어서 사용하는 것이 "템플릿"으로 활용된다.  
-인터페이스가 구현이 어떻게 되어있는지 보단, 이런 구현체를 마련해주었다는거에 좀 더 집중을 하는 것이다.  
-인터페이스가 정의가 만족되고 있는 클래스 하나를 만들어서 사용자 정보를 관리하고  
-그 사용자 정보를 바탕으로 필요한 기능(로그인, 로그아웃 등등)들을 Framework가 알아서 하는 것이다.    
-=> 인터페이스를 쓰면 뭐가 좋은지 고민해보기(인터페이스와 구현체를 왜 나누었을까?)  
-
-`1월 26일`
-
-
-이 프로젝트는 localLogin, JWT, OAuth 별로 3가지 방법으로 패키지를 나누도록 리팩토링할 것이다.
-우선 강의를 다시 처음부터 끝까지 듣는다.
-요일 별로 사용했던 패키지를 토글로 남긴다.
-파일명은 강의에서 사용한 파일명 + "Local" or "Jwt" or "OAuth"로 한다.
-
-## 스택
+## 스팩
 
 - Spring Boot 3.2.2
 - Spring Web
@@ -54,11 +12,81 @@ interface를 기반 커스터마이징 (Strategy Pattern),
 - Lombok
 - Thymeleaf
 - Thymeleaf - springsecurity6
-- Jjwt
-- oauth2-client
-
-## Key Point
+- jjwt
+- OAuth2-client
 
 
+## 수업 파일
 
+<details>
+<summary><strong>01/25 Form Login</strong></summary>
+
+<새로 생성한 파일>
+- `WebSecurityConfig`: formLogin 설정
+- `RootController`: Spring Security 기본 로그인 화면(WebSecurityConfig 추가하면 나오지 않는다.)
+- `UserController`: Form Login 컨트롤러
+- `login-form.html`: 로그인 페이지
+- `register-form.html`: 회원가입 페이지
+- `my-profile.html`: 로그인 후 회원 페이지
+- `index.html`: 로그인이 안되어 있다면 로그인 페이지, 로그인이 되었다면 회원 페이지
+- `IUserService`: 인터페이스
+- `UserServiceImpl`: 인터페이스 구현 클래스
+
+</details>
+
+<details>
+<summary><strong>01/26 Form Login + JWT</strong></summary>
+
+<새로 생성한 파일>
+- `AuthenticationFacade`: Facade Pattern을 이용한 클래스 파일
+- `UserRepository`: DB에 저장하기 위해
+- `UserEntity`: DB에 저장하기 위해
+- `JPAUserDetailsManager`: 사용자의 정보를 커스텀하기 위해
+- `CustomUserDetails`: 사용자의 정보를 커스텀하고 주고 받기 위해
+- `TestController`: Interceptor 적용 컨트롤러
+- `LoggingInterceptor`: Interceptor 로직 설정
+- `InterceptorConfig`: Interceptor 설정
+- `TestDto`: Body 데이터를 읽기 위해 만들었다.
+- `LogFilter`: Filter를 이용해 Log 찍어보기
+- `AllAuthenticatedFilter`: Custom Filter 만들어보기
+
+<편집 파일>
+- `WebSecurityConfig`: "/tests" 경로 추가를 위해 설정, AllAuthenticatedFilter 등록
+</details>
+
+<details>
+<summary><strong>01/29 JWT</strong></summary>
+
+<새로 생성한 파일>
+- `JwtTokenUtils`: JWT 자체와 관련된 기능을 만드는 곳
+- `TokenController`: JwtTokenUtils를 활용하는 엔드포인트
+- `JwtRequestDto`
+- `JwtResponseDto`
+- `JwtTokenFilter`: JWT 토큰으로 인증을 하는 필터
+- `PasswordEncoderConfig`: 순환참조 방지를 위해 따로 빼둠
+
+<편집 파일>
+- `WebSecurityConfig`: JWT 로그인 설정으로 변경
+- `application.yaml`: JWT 암호키 설정
+</details>
+
+<details>
+<summary><strong>01/30 Authorization</strong></summary>
+
+<새로 생성한 파일>
+- `AuthorizationController`: 권한을 통해 요청이 잘 분류되어 접근이 되는지 확인하기 위한 컨트롤러
+- Article
+- ArticleRepository
+- ArticleDto
+- ArticleWriterDto: 사용자별 등급에 따라 나누어 기능 세분화를 할 수 있게 만듬(사용하지는 않음)
+- ArticleService
+- ArticleController
+
+<편집 파일>
+- `JwtTokenFilter`: 권한 관련 코드
+- `CustomUserDetails`: 권한 관련 코드
+- `WebSecurityConfig`: 권한 관련 코드
+- `JpaUserDetailsManager`: 관리자 계정 생성
+
+</details>
 

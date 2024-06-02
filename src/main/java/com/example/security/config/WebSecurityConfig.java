@@ -56,13 +56,41 @@ public class WebSecurityConfig {
                 "/token/validate"
             )
             .permitAll()
-            .requestMatchers("/users/my-profile")
+
+            .requestMatchers(HttpMethod.GET, "/articles")
+            .permitAll()
+
+            .requestMatchers(HttpMethod.POST, "/articles")
+            .authenticated()
+
+            .requestMatchers(
+                "/users/my-profile"
+            )
             .authenticated()
             .requestMatchers(
                 "/users/login",
                 "/users/register"
             )
             .anonymous()
+
+            // ROLE에 따른 접근 설정
+            .requestMatchers("/auth/user-role")
+            //Note. hasAnyRole() 사용
+             .hasAnyRole("USER", "ADMIN")
+
+            .requestMatchers("/auth/admin-role")
+            //Note. hasRole() 사용
+            .hasRole("ADMIN")
+
+            // AUTHORITY에 따른 접근 설정
+            .requestMatchers("/auth/read-authority")
+            //Note. hasAuthority() 사용
+            .hasAuthority("READ_AUTHORITY") // 풀네임 다 적어줘야 한다.
+
+            //Note. hasAnyAuthority() 사용
+            .requestMatchers("/auth/write-authority")
+            .hasAnyAuthority("READ_AUTHORITY", "WRITE_AUTHORITY")
+
             .anyRequest()
             .permitAll()
         )

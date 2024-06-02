@@ -48,10 +48,13 @@ public class JpaUserDetailsManager implements UserDetailsManager {
       .password(passwordEncoder.encode("password"))
       .email("user1@gmail.com")
       .phone("01012345678")
-      // hasRole() 사용
+      //Note hasRole() 사용
       // .authorities("ROLE_USER,ROLE_ADMIN")
+
       //Note. 인당 역할 하나 부여, hasAnyRole() 사용
       // .authorities("ROLE_ADMIN")
+
+      // Note. 역할과 권한 부여
       .authorities("ROLE_ADMIN,WRITE_AUTHORITY")
       .build());
   }
